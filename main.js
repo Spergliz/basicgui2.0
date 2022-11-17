@@ -25,7 +25,7 @@ function goBtnHandler() {
 
 // MENU FUNCTIONS
 function addTask() {
-  console.log('Add Task');
+  let description = prompt ("enter task description ")
 }
 
 function toggleTask() {
