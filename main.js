@@ -6,8 +6,8 @@ let menuEl = document.getElementById("menu");
 let tasksEl = document.getElementById("tasks");
 
 //GVar
-let tasks = [];
-
+let tasks = loadtask();
+displayall();
 // Go Btn - Menu Listener
 goBtnEl.addEventListener("click", goBtnHandler);
 
@@ -31,19 +31,36 @@ function addTask() {
   let description = prompt("enter task description ");
   tasks.push(newtask(description));
   tasksEl.innerHTML = `task added: ${description}`;
+  saveTasks();
   displayall();
 }
 
 function toggleTask() {
-  console.log("Toggle Task");
+  let index = +prompt("enter # of task:");
+  let task = tasks[index];
+  if (task.completed === "") {
+    task.completed = "completed";
+  } else {
+    task.completed = "";
+  }
+  displayall();
 }
 
 function removeTask() {
-  console.log("Remove Task");
+  let index = +prompt("enter # of task");
+  if (index >= 0 && index < tasks.length) {
+    tasks.splice(index, 1);
+    saveTasks();
+    displayall();
+  } else {
+    alert("invalid task");
+  }
 }
 
 function clearAll() {
-  console.log("Clear All");
+  localStorage.clear();
+  tasks = [];
+  displayall();
 }
 
 //help functions
@@ -62,8 +79,15 @@ function displayall() {
 }
 function gettaskhtmlstr(task, i) {
   return `
-  <Div>
+  <Div class="${task.completed}">
     ${i}: ${task.description}
   </div>
   `;
+}
+function saveTasks() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+function loadtask() {
+  let taskstr = localStorage.getItem("tasks");
+  return JSON.parse(taskstr) ?? [];
 }
